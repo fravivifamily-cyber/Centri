@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Modulo Proposte/Regolamenti/Monitoraggio Centri - UniPA</title>
+<style>
+    :root{
+      --bg:#0b1220;
+      --card:#101a2f;
+      --muted:#a9b3c7;
+      --text:#eef2ff;
+      --accent:#4aa3ff;
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    
+      --grad1: rgba(74,163,255,.18);
+      --grad2: rgba(34,197,94,.16);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --field-bg: rgba(6,18,37,.45);
+      --field-text: var(--text);
+}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--font);
+      background: radial-gradient(1200px 700px at 20% 0%, var(--grad1), transparent 60%),
+                  radial-gradient(900px 600px at 80% 10%, var(--grad2), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .container{
+      max-width:1100px;
+      margin:32px auto;
+      padding:0 18px 46px;
+    }
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    h1{
+      font-size:22px;
+      margin:0;
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      max-width:780px;
+    }
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    button, .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition:.15s ease;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+      white-space:nowrap;
+    }
+    button:hover{ transform: translateY(-1px); border-color:rgba(255,255,255,.18); }
+    button:active{ transform: translateY(0); }
+    .btn-primary{
+      background: linear-gradient(180deg, rgba(74,163,255,.95), rgba(74,163,255,.75));
+      border-color: rgba(74,163,255,.35);
+      color:#061225;
+    }
+    .btn-success{
+      background: linear-gradient(180deg, rgba(34,197,94,.95), rgba(34,197,94,.75));
+      border-color: rgba(34,197,94,.35);
+      color:#061225;
+    }
+    .btn-danger{
+      background: rgba(239,68,68,.16);
+      border-color: rgba(239,68,68,.35);
+      color: #fecaca;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+    }
+    @media (max-width:980px){
+      .grid{ grid-template-columns: 1fr; }
+      header{ flex-direction:column; }
+      .top-actions{ justify-content:flex-start; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .card-h{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: rgba(0,0,0,.10);
+    }
+    .card .card-h h2{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.2px;
+    }
+    .card .card-b{
+      padding:16px;
+    }
+
+    .steps{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .step{
+      padding:8px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background: rgba(255,255,255,.03);
+    }
+    .step.active{
+      color: var(--text);
+      border-color: rgba(74,163,255,.35);
+      background: rgba(74,163,255,.10);
+    }
+    .badge{
+      width:22px; height:22px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.08);
+      border:1px solid var(--border);
+      color: var(--text);
+      font-weight:800;
+      font-size:12px;
+    }
+    .step.active .badge{
+      background: rgba(74,163,255,.22);
+      border-color: rgba(74,163,255,.35);
+      color: #cfe9ff;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    @media (max-width:720px){
+      .row{ grid-template-columns:1fr; }
+    }
+    label{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      margin-bottom:6px;
+    }
+    input[type="text"], input[type="number"], input[type="date"], select, textarea{
+      width:100%;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(6,18,37,.45);
+      color: var(--text);
+      outline:none;
+      transition:.15s ease;
+    }
+    textarea{ min-height:96px; resize:vertical; }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(74,163,255,.55);
+      box-shadow: 0 0 0 3px rgba(74,163,255,.12);
+    }
+    .hint{
+      margin-top:6px;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.4;
+    }
+    .req{
+      color: rgba(255,255,255,.75);
+      font-weight:800;
+      margin-left:6px;
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+    }
+    .err{
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(239,68,68,.35);
+      background: rgba(239,68,68,.10);
+      color:#fecaca;
+      font-size:13px;
+      display:none;
+      white-space:pre-line;
+    }
+    .ok{
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(34,197,94,.35);
+      background: rgba(34,197,94,.10);
+      color:#bbf7d0;
+      font-size:13px;
+      display:none;
+      white-space:pre-line;
+    }
+    .actions{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .actions .left, .actions .right{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+
+    .side-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .side-item{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+    .side-item b{ display:block; font-size:13px; margin-bottom:4px; }
+    .side-item p{
+      margin:0;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    .files{
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .file-row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:10px 10px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      margin-top:10px;
+      background: rgba(0,0,0,.12);
+    }
+    .file-row:first-child{ margin-top:0; }
+    .file-row .meta{
+      display:flex; flex-direction:column; gap:2px; min-width:0;
+    }
+    .file-row .meta .name{ font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .file-row .meta .desc{ font-size:12px; color:var(--muted); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .small{ font-size:12px; color:var(--muted); }
+    .hr{ height:1px; background: var(--border); margin:12px 0; }
+    .kvs{ display:grid; grid-template-columns: 1fr; gap:8px; }
+    .kv{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      background: rgba(255,255,255,.03);
+    }
+    .kv .k{ font-size:12px; color:var(--muted); margin-bottom:4px; }
+    .kv .v{ font-size:13px; white-space:pre-wrap; word-break:break-word; }
+    .hidden{ display:none !important; }
+  
+
+    /* -------------------------
+       Theme variants
+       ------------------------- */
+    body[data-theme="unipa-dark"]{
+      /* default (matches original) */
+    }
+
+    body[data-theme="light-azzurro"]{
+      --bg:#eef6ff;
+      --card:#ffffff;
+      --muted:#42526e;
+      --text:#0b1220;
+      --accent:#1d7fe8;
+      --accent2:#14a86a;
+      --border: rgba(11,18,32,.12);
+      --shadow: 0 14px 40px rgba(11,18,32,.12);
+      --grad1: rgba(29,127,232,.14);
+      --grad2: rgba(20,168,106,.10);
+      --field-bg: rgba(255,255,255,.95);
+      --field-text: #0b1220;
+    }
+
+    body[data-theme="apple2e"]{
+      --bg:#0b0f0b;
+      --card:#0f1a0f;
+      --muted:#6fe86f;
+      --text:#b7ffb7;
+      --accent:#6fe86f;
+      --accent2:#6fe86f;
+      --warn:#d7ff6f;
+      --danger:#ff6f6f;
+      --border: rgba(111,232,111,.28);
+      --shadow: 0 14px 40px rgba(0,0,0,.55);
+      --grad1: rgba(0,0,0,0);
+      --grad2: rgba(0,0,0,0);
+      --font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --field-bg: rgba(0,0,0,.35);
+      --field-text: #b7ffb7;
+    }
+    .theme-select{
+      appearance:none;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition:.15s ease;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+      white-space:nowrap;
+      max-width: 220px;
+    }
+    .theme-select:hover{ transform: translateY(-1px); border-color:rgba(255,255,255,.18); }
+    body[data-theme="light-azzurro"] .theme-select,
+    body[data-theme="light-azzurro"] button,
+    body[data-theme="light-azzurro"] .btn{
+      background: rgba(11,18,32,.04);
+    }
+
+    .status-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background: rgba(255,255,255,.04);font-size:12px;color: var(--muted);white-space:nowrap;}
+    .status-ok{border-color: rgba(34,197,94,.35);background: rgba(34,197,94,.10);color:#bbf7d0;}
+    .status-warn{border-color: rgba(245,158,11,.35);background: rgba(245,158,11,.10);color:#fde68a;}
+    .dash-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .dash-row button{padding:8px 10px;border-radius:12px;}
+
+</style>
+
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<div class="container">
+<header>
+<div class="title">
+<h1>Modulo Proposte / Regolamenti / Monitoraggio Centri (Allegati A–N)</h1>
+<p class="subtitle">
+          Compila il modulo selezionando l’Allegato di riferimento. I campi si adattano automaticamente alla tipologia.
+          Puoi salvare una bozza sul browser, esportare i dati in PDF (un PDF per ogni Allegato) e inviare il pacchetto a un endpoint di protocollo/gestione documentale.
+        </p>
+</div>
+<div class="top-actions">
+  <a id="quickGuideLink" href="guida/Guida_rapida_Modulo_Centri_UniPA.pdf" target="_blank" rel="noopener" style="text-decoration:none; padding:8px 10px; border-radius:12px; border:1px solid var(--border); color:var(--text); background: rgba(255,255,255,.04);">Guida rapida (PDF)</a>
+<button id="btnLoadDraft" title="Carica bozza salvata">Carica bozza</button>
+<button id="btnSaveDraft" title="Salva bozza sul browser">Salva bozza</button>
+<button class="btn-danger" id="btnClear" title="Pulisci tutti i campi">Svuota</button>
+<select id="themeSelect" class="theme-select" title="Seleziona tema">
+          <option value="unipa-dark">Tema: Scuro</option>
+          <option value="light-azzurro">Tema: Chiaro</option>
+
+<option value="apple2e">Tema: Mono</option>
+</select>
+<button id="btnExportPractice" title="Esporta pratica (ZIP)">Esporta pratica</button>
+<button id="btnImportPractice" title="Importa pratica (ZIP)">Importa pratica</button>
+<input id="importPracticeInput" type="file" accept=".zip" class="hidden" />
+<select id="modeSelect" class="theme-select" title="Modalita" style="min-width:190px">
+  <option value="edit">Modalita: Compilazione</option>
+  <option value="readonly">Modalita: Sola lettura</option>
+  <option value="production">Modalita: Produzione</option>
+</select></div>
+</header>
+<div class="grid">
+<div class="card">
+<div class="card-h">
+<div aria-label="Passaggi modulo" class="steps">
+<div class="step active" data-step="1"><span class="badge">1</span> Scelta Allegato</div>
+<div class="step" data-step="2"><span class="badge">2</span> Dati e campi</div>
+<div class="step" data-step="3"><span class="badge">3</span> Allegati</div>
+<div class="step" data-step="4"><span class="badge">4</span> Riepilogo</div>
+</div>
+<span class="pill" id="pillAnnex">Allegato: —</span>
+</div>
+<div class="card-b">
+<!-- STEP 1 -->
+<section id="step1">
+<div class="row">
+<div>
+<label for="submissionType">Tipo pratica <span class="req">OBBLIGATORIO</span></label>
+<select id="submissionType" required>
+<option value="">— Seleziona —</option>
+<option value="nuova">Nuova proposta / istituzione</option>
+<option value="adesione">Adesione</option>
+<option value="rinnovo">Rinnovo</option>
+<option value="convenzione_regolamento">Convenzione / Regolamento</option>
+<option value="monitoraggio">Monitoraggio</option>
+</select>
+<div class="hint">Seleziona il tipo di pratica per filtrare l’elenco degli Allegati disponibili.</div>
+</div>
+<div>
+<label for="annex">Seleziona Allegato <span class="req">OBBLIGATORIO</span></label>
+<select id="annex" required="">
+<option value="">— Seleziona —</option>
+<option value="A">Allegato A (CAPO I ART. 4) – Proposta istituzione Centro Interuniversitario</option>
+<option value="B">Allegato B (CAPO I ART. 5) – Adesione di altri Atenei a Centro Interuniversitario</option>
+<option value="C">Allegato C (CAPO I ART. 6) – Istanza rinnovo Centro Interuniversitario</option>
+<option value="D">Allegato D (CAPO I ART. 8) – Convenzione Centri Interuniversitari</option>
+<option value="E">Allegato E (CAPO II ART. 13) – Proposta istituzione Centro Interdipartimentale</option>
+<option value="F">Allegato F (CAPO II ART. 14) – Istanza rinnovo Centro Interdipartimentale</option>
+<option value="G">Allegato G (CAPO II ART. 18) – Regolamento Centri Interdipartimentali</option>
+<option value="H">Allegato H (CAPO III ART. 24) – Proposta istituzione Centro di Servizi</option>
+<option value="I">Allegato I (CAPO III ART. 30) – Regolamento Centri di Servizi</option>
+<option value="L">Allegato L (CAPO IV ART. 36) – Proposta istituzione Centro di Ateneo</option>
+<option value="M">Allegato M (CAPO IV ART. 42) – Regolamento Centri di Ateneo</option>
+<option value="N">Allegato N – Monitoraggio annuale (tutte le tipologie)</option>
+</select>
+<div class="hint">
+                  L’elenco è filtrato in base al “Tipo pratica”. La selezione determina campi obbligatori, durata (ove prevista) e tipologia di documentazione richiesta.
+                </div>
+</div>
+</div>
+<div class="row">
+<div>
+<label for="toRector">Destinatario</label>
+<input id="toRector" type="text" value="Magnifico Rettore"/>
+<div class="hint">Per Allegati A, C, E (e in generale dove previsto).</div>
+</div>
+<div>
+<label for="requestDate">Data richiesta</label>
+<input id="requestDate" type="date"/>
+</div>
+</div>
+
+<div class="actions">
+<div class="left">
+<span class="small">Suggerimento: salva una bozza prima di passare allo step successivo.</span>
+</div>
+<div class="right">
+<button class="btn-primary" id="next1">Continua</button>
+</div>
+</div>
+
+            <div class="side-item">
+              <b>Pratica – stato allegati</b>
+              <p class="small">Gli allegati compilati vengono salvati in locale (campi + file PDF/JPEG). Puoi passare da un Allegato all’altro senza perdere i dati e generare un unico Fascicolo PDF.</p>
+              <div id="practiceDashboard" class="kvs" style="margin-top:10px"></div>
+              <div class="actions" style="margin-top:12px">
+                <div class="left"><span class="small" id="practiceStats">—</span></div>
+                <div class="right">
+                  <button class="btn-success" id="btnGenerateFascicolo" type="button" disabled>Genera Fascicolo PDF</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr"></div><div class="side-item" id="metaBox">
+              <b>Metadati amministrativi</b>
+              <p class="small">Campi facoltativi per uso d'ufficio. Puoi includerli o escluderli dal Fascicolo PDF.</p>
+
+              <div class="row" style="margin-top:10px">
+                <div>
+                  <label for="metaUfficio">Ufficio / Struttura</label>
+                  <input id="metaUfficio" type="text" placeholder="Es. Area Terza Missione / U.O. Centri" />
+                </div>
+                <div>
+                  <label for="metaArea">Area / Settore</label>
+                  <input id="metaArea" type="text" placeholder="Es. Settore Programmazione" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label for="metaResp">Responsabile / Istruttore</label>
+                  <input id="metaResp" type="text" placeholder="Nome Cognome" />
+                </div>
+                <div>
+                  <label for="metaRif">Riferimento (delibera / nota / prot.)</label>
+                  <input id="metaRif" type="text" placeholder="Es. Nota prot. n. … / Delibera …" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label for="metaInclude">Includi nel Fascicolo PDF</label>
+                  <select id="metaInclude">
+                    <option value="si">Sì</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="metaPrivacy">Visibilità note</label>
+                  <select id="metaPrivacy">
+                    <option value="standard">Standard</option>
+                    <option value="riservato">Riservato (non stampare le note)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="metaNote">Note istruttoria interna</label>
+                <textarea id="metaNote" rows="3" placeholder="Annotazioni per revisione interna (facoltative)"></textarea>
+                <div class="hint">Le note possono essere escluse dal PDF con "Visibilità note = Riservato".</div>
+              </div>
+            </div>
+
+
+<div class="err" id="err1"></div>
+</section>
+<!-- STEP 2 -->
+<section class="hidden" id="step2">
+<div id="dynamicFields"></div>
+<div class="actions">
+<div class="left">
+<button id="back2">Indietro</button>
+</div>
+<div class="right">
+<button class="btn-primary" id="next2">Continua</button>
+</div>
+</div>
+<div class="err" id="err2"></div>
+</section>
+<!-- STEP 3 -->
+<section class="hidden" id="step3">
+<div class="files">
+<div class="row">
+<div>
+<label for="fileInput">Carica documenti (PDF/JPEG)</label>
+<input id="fileInput" type="file" multiple accept="application/pdf,image/jpeg" />
+<div class="hint">I file restano nel browser fino all’invio.</div>
+</div>
+<div>
+<label for="fileNote">Note su allegati</label>
+<textarea id="fileNote" placeholder="Es. Verbali CdD, bozza convenzione, regolamento, pianificazione sito..."></textarea>
+</div>
+</div>
+<div class="hr"></div>
+<div class="small" id="fileList">Nessun file caricato.</div>
+</div>
+<div class="actions">
+<div class="left">
+<button id="back3">Indietro</button>
+</div>
+<div class="right">
+<button class="btn-primary" id="next3">Continua</button>
+</div>
+</div>
+<div class="err" id="err3"></div>
+</section>
+<!-- STEP 4 -->
+<section class="hidden" id="step4">
+<div class="kvs" id="summary"></div>
+<div class="actions">
+<div class="left">
+<button id="back4">Indietro</button>
+<button id="btnSaveAnnex">Salva Allegato nella Pratica</button>
+<button id="btnDownloadPDF">Scarica PDF Allegato</button>
+</div>
+<div class="right">
+                <button class="btn-primary" id="btnBackToAttachments">Torna alla scelta Allegato</button>
+</div>
+</div>
+<div class="ok" id="ok4"></div>
+<div class="err" id="err4"></div>
+<div class="hint" style="margin-top:10px">
+<b>Nota tecnica:</b> l’invio richiede un endpoint server (es. /api/submit). In assenza di backend, usa “Scarica PDF Allegato” e protocolla manualmente.
+            </div>
+</section>
+</div>
+</div>
+<!-- Sidebar -->
+<aside class="card">
+<div class="card-h">
+<h2>Guida rapida</h2>
+<span class="pill">Validazioni</span>
+</div>
+<div class="card-b">
+<div class="side-list" id="sideHelp">
+<div class="side-item">
+<b>Durata</b>
+<p>Quando prevista: minimo 3 anni, massimo 6 anni.</p>
+</div>
+<div class="side-item">
+<b>Riferimenti documentali</b>
+<p>Carica verbali, bozze e pianificazioni come allegati nello step 3.</p>
+</div>
+<div class="side-item">
+<b>Indicatori di monitoraggio</b>
+<p>Inserisci KPI misurabili (es. n. progetti, n. TT, introiti, pubblicazioni, accordi, ecc.).</p>
+</div>
+<div class="side-item">
+<b>Monitoraggio (Allegato N)</b>
+<p>Seleziona se la struttura è dotata di budget e compila le relazioni richieste.</p>
+</div>
+</div>
+<div class="hr"></div>
+<div class="small">
+<div><b>Bozza:</b> salvata solo sul browser dell’utente (localStorage).</div>
+<div><b>Privacy:</b> valutare informativa e consenso se raccogli dati personali.</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<script crossorigin="anonymous" referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script crossorigin="anonymous" referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    // -------------------------
+    // Schema campi per Allegato
+    // -------------------------
+    const annexSchemas = {
+      A: {
+        label: "Allegato A – Proposta istituzione Centro Interuniversitario",
+        submissionType: "nuova",
+        fields: [
+          { id:"denominazione", label:"Denominazione del Centro Interuniversitario", type:"text", required:true },
+          { id:"durata_anni", label:"Durata (anni) – tra 3 e 6", type:"number", required:true, min:3, max:6 },
+          { id:"missione", label:"Missione", type:"textarea", required:true },
+          { id:"obiettivi", label:"Obiettivi", type:"textarea", required:true },
+          { id:"indicatori", label:"Indicatori di monitoraggio (KPI)", type:"textarea", required:true, placeholder:"Es. n. progetti, n. brevetti/TT, n. iniziative terza missione, introiti, ecc." },
+          { id:"ambiti_attivita", label:"Ambiti di attività (ricerca, TT, terza missione)", type:"textarea", required:true },
+          { id:"programma_attivita", label:"Programma delle attività per il periodo individuato", type:"textarea", required:true },
+          { id:"bozza_convenzione", label:"Bozza convenzione di funzionamento (descrizione/nota)", type:"textarea", required:false },
+          { id:"elenco_atenei", label:"Elenco Atenei aderenti (uno per riga)", type:"textarea", required:true },
+          { id:"estratto_verbali", label:"Estratto verbali CdD (descrizione e riferimenti)", type:"textarea", required:true },
+          { id:"docenti_referenti", label:"Docenti referenti (nome, dipartimento, email) – uno per riga", type:"textarea", required:true },
+          { id:"pianificazione_sito", label:"Pianificazione sito web del Centro", type:"textarea", required:true }
+        ],
+        requiredDocs: [
+          "Bozza convenzione (art. 8)",
+          "Estratti verbali CdD Dipartimenti coinvolti con volontà di istituire e nominativi referenti",
+          "Pianificazione sito web"
+        ]
+      },
+      B: {
+        label: "Allegato B – Proposta adesione di altri Atenei (Centro Interuniversitario)",
+        submissionType: "adesione",
+        fields: [
+          { id:"denominazione_centro", label:"Denominazione Centro Interuniversitario", type:"text", required:true },
+          { id:"bozza_convenzione", label:"Bozza della Convenzione (descrizione/nota)", type:"textarea", required:true },
+          { id:"estratto_verbali", label:"Estratto verbali CdD (volontà di aderire + docenti referenti)", type:"textarea", required:true },
+          { id:"atenei_aderenti", label:"Atenei che intendono aderire (uno per riga)", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Bozza Convenzione", "Estratti verbali CdD (adesione + referenti)"]
+      },
+      C: {
+        label: "Allegato C – Istanza rinnovo Centro Interuniversitario",
+        submissionType: "rinnovo",
+        fields: [
+          { id:"denominazione", label:"Denominazione del Centro Interuniversitario", type:"text", required:true },
+          { id:"data_scadenza", label:"Data scadenza attuale del Centro", type:"date", required:true },
+          { id:"verbali_rinnovo", label:"Estratti verbali CdD (volontà di rinnovare + docenti referenti)", type:"textarea", required:true },
+          { id:"delibere_atenei", label:"Riferimenti delibere degli Atenei che rinnovano l’adesione", type:"textarea", required:true },
+          { id:"attivita_svolte", label:"Attività svolte nel periodo precedente (descrizione)", type:"textarea", required:true },
+          { id:"risultati", label:"Risultati attività svolte", type:"textarea", required:true },
+          { id:"finanziamenti", label:"Finanziamenti ricevuti (se presenti)", type:"textarea", required:false },
+          { id:"stato_progetti", label:"Stato avanzamento progetti", type:"textarea", required:true }
+        ],
+        requiredDocs: [
+          "Estratti verbali CdD (rinnovo + referenti)",
+          "Riferimenti delibere Atenei",
+          "Documentazione risultati/finanziamenti/avanzamento"
+        ]
+      },
+      D: {
+        label: "Allegato D – Convenzione Centri Interuniversitari",
+        submissionType: "convenzione_regolamento",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"sede", label:"Sede", type:"text", required:true },
+          { id:"atenei_coinvolti", label:"Atenei coinvolti (uno per riga)", type:"textarea", required:true },
+          { id:"scopo_attivita", label:"Scopo da perseguire e attività da svolgere", type:"textarea", required:true },
+          { id:"soggetti_aderenti", label:"Soggetti aderenti al Centro Interuniversitario", type:"textarea", required:true },
+          { id:"struttura_gestione", label:"Struttura competente per gestione amministrativo-contabile e patrimoniale", type:"textarea", required:true },
+          { id:"organi_durata_funzioni", label:"Organi, durata, modalità di composizione e funzioni", type:"textarea", required:true },
+          { id:"gestione_risorse", label:"Modalità gestione risorse finanziarie e patrimoniali", type:"textarea", required:true },
+          { id:"modifica_recesso", label:"Modalità di modifica e recesso", type:"textarea", required:true },
+          { id:"relazioni_periodiche", label:"Modalità stesura relazioni periodiche sulle attività", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Testo convenzione firmabile (PDF/DOCX)"]
+      },
+      E: {
+        label: "Allegato E – Proposta istituzione Centro Interdipartimentale",
+        submissionType: "nuova",
+        fields: [
+          { id:"denominazione", label:"Denominazione del Centro Interdipartimentale", type:"text", required:true },
+          { id:"durata_anni", label:"Durata (anni) – tra 3 e 6", type:"number", required:true, min:3, max:6 },
+          { id:"missione", label:"Missione", type:"textarea", required:true },
+          { id:"obiettivi", label:"Obiettivi", type:"textarea", required:true },
+          { id:"indicatori", label:"Indicatori di monitoraggio (KPI)", type:"textarea", required:true },
+          { id:"ambiti_attivita", label:"Ambiti di attività (ricerca, TT, terza missione)", type:"textarea", required:true },
+          { id:"programma_attivita", label:"Programma attività per il periodo individuato", type:"textarea", required:true },
+          { id:"docenti_afferenti", label:"Elenco nominativo docenti afferenti (almeno due Dipartimenti) – uno per riga", type:"textarea", required:true },
+          { id:"verbali_istituzione", label:"Estratti verbali CdD Dipartimenti coinvolti (istituzione + referenti)", type:"textarea", required:true },
+          { id:"dip_sede_amministrativa", label:"Dipartimento sede amministrativa (indicazione)", type:"text", required:true },
+          { id:"delibera_accettazione_sede", label:"Delibera CdD del Dipartimento sede amministrativa (riferimenti)", type:"textarea", required:true },
+          { id:"bozza_regolamento", label:"Bozza regolamento di funzionamento (art. 18) – descrizione/nota", type:"textarea", required:true },
+          { id:"pianificazione_sito", label:"Pianificazione sito web del Centro", type:"textarea", required:true }
+        ],
+        requiredDocs: [
+          "Estratti verbali CdD (istituzione + referenti)",
+          "Delibera accettazione Dipartimento sede amministrativa",
+          "Bozza regolamento (art. 18)",
+          "Pianificazione sito web"
+        ]
+      },
+      F: {
+        label: "Allegato F – Istanza rinnovo Centro Interdipartimentale",
+        submissionType: "rinnovo",
+        fields: [
+          { id:"denominazione", label:"Denominazione del Centro Interdipartimentale", type:"text", required:true },
+          { id:"data_scadenza", label:"Data scadenza attuale del Centro", type:"date", required:true },
+          { id:"attivita", label:"Descrizione attività svolte e da svolgere", type:"textarea", required:true },
+          { id:"risultati", label:"Risultati attività svolte", type:"textarea", required:true },
+          { id:"finanziamenti", label:"Finanziamenti ricevuti (se presenti)", type:"textarea", required:false },
+          { id:"stato_progetti", label:"Stato avanzamento progetti", type:"textarea", required:true },
+          { id:"verbali_rinnovo", label:"Estratti verbali CdD Dipartimenti coinvolti (rinnovo + referenti)", type:"textarea", required:true },
+          { id:"dip_gestione_amministrativa", label:"Dipartimento che assume gestione amministrativa", type:"text", required:true }
+        ],
+        requiredDocs: [
+          "Estratti verbali CdD (rinnovo + referenti)",
+          "Relazione attività/risultati/finanziamenti/avanzamento",
+          "Indicazione Dipartimento gestione amministrativa"
+        ]
+      },
+      G: {
+        label: "Allegato G – Regolamento Centri Interdipartimentali",
+        submissionType: "convenzione_regolamento",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"sede", label:"Sede", type:"text", required:true },
+          { id:"dip_proponenti", label:"Dipartimenti proponenti (uno per riga)", type:"textarea", required:true },
+          { id:"scopo_attivita", label:"Scopo e attività", type:"textarea", required:true },
+          { id:"risorse_finanziarie", label:"Risorse finanziarie (se presenti)", type:"textarea", required:false },
+          { id:"soggetti_aderenti", label:"Soggetti aderenti al Centro Interdipartimentale", type:"textarea", required:true },
+          { id:"dip_gestione_amministrativa", label:"Dipartimento competente per gestione amministrativa", type:"text", required:true },
+          { id:"organi", label:"Organi (Direttore, Assemblea, Consiglio scientifico), durata e funzioni", type:"textarea", required:true },
+          { id:"relazioni_periodiche", label:"Modalità stesura relazioni periodiche", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Testo regolamento firmabile (PDF/DOCX)"]
+      },
+      H: {
+        label: "Allegato H – Proposta istituzione Centro di Servizi",
+        submissionType: "nuova",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"missione", label:"Missione", type:"textarea", required:true },
+          { id:"obiettivi", label:"Obiettivi", type:"textarea", required:true },
+          { id:"indicatori", label:"Indicatori di monitoraggio", type:"textarea", required:true },
+          { id:"ambiti_attivita", label:"Ambiti di attività previsti", type:"textarea", required:true },
+          { id:"programma_catalogo", label:"Programma attività e catalogo servizi offerti", type:"textarea", required:true },
+          { id:"ragioni_autonomia", label:"Ragioni per autonomia economico-gestionale (art. 23, c.2)", type:"textarea", required:true },
+          { id:"previsione_risorse_esterne", label:"Previsione acquisizione risorse esterne (stima primi 3 anni)", type:"textarea", required:true },
+          { id:"pianificazione_sito", label:"Pianificazione sito web", type:"textarea", required:true },
+          { id:"bozza_regolamento", label:"Bozza regolamento di funzionamento", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Bozza regolamento", "Pianificazione sito", "Documentazione supporto autonomia/risorse esterne"]
+      },
+      I: {
+        label: "Allegato I – Regolamento Centri di Servizi",
+        submissionType: "convenzione_regolamento",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"scopo_attivita", label:"Scopo e attività", type:"textarea", required:true },
+          { id:"risorse_finanziarie", label:"Risorse finanziarie (se presenti)", type:"textarea", required:false },
+          { id:"composizione_cs", label:"Modalità composizione Consiglio Scientifico", type:"textarea", required:true },
+          { id:"organi_aggiuntivi", label:"Organi eventuali (oltre Direttore e CS): compiti e composizione", type:"textarea", required:false },
+          { id:"relazioni_periodiche", label:"Modalità stesura relazioni periodiche", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Testo regolamento firmabile (PDF/DOCX)"]
+      },
+      L: {
+        label: "Allegato L – Proposta istituzione Centro di Ateneo",
+        submissionType: "nuova",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"missione", label:"Missione", type:"textarea", required:true },
+          { id:"obiettivi", label:"Obiettivi", type:"textarea", required:true },
+          { id:"indicatori", label:"Indicatori di monitoraggio", type:"textarea", required:true },
+          { id:"ambiti_attivita", label:"Ambiti di attività previsti", type:"textarea", required:true },
+          { id:"programma_catalogo", label:"Programma attività e catalogo servizi offerti", type:"textarea", required:true },
+          { id:"pianificazione_sito", label:"Pianificazione sito web", type:"textarea", required:true },
+          { id:"bozza_regolamento", label:"Bozza regolamento di funzionamento", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Bozza regolamento", "Pianificazione sito"]
+      },
+      M: {
+        label: "Allegato M – Regolamento Centri di Ateneo",
+        submissionType: "convenzione_regolamento",
+        fields: [
+          { id:"denominazione", label:"Denominazione", type:"text", required:true },
+          { id:"scopo_attivita", label:"Scopo e attività", type:"textarea", required:true },
+          { id:"risorse_finanziarie", label:"Risorse finanziarie (se presenti)", type:"textarea", required:false },
+          { id:"composizione_cs_assemblea", label:"Modalità composizione Consiglio Scientifico e/o Assemblea", type:"textarea", required:true },
+          { id:"organi_aggiuntivi", label:"Organi eventuali: compiti e composizione", type:"textarea", required:false },
+          { id:"relazioni_periodiche", label:"Modalità stesura relazioni periodiche", type:"textarea", required:true }
+        ],
+        requiredDocs: ["Testo regolamento firmabile (PDF/DOCX)"]
+      },
+      N: {
+        label: "Allegato N – Monitoraggio annuale (tutte le tipologie)",
+        submissionType: "monitoraggio",
+        fields: [
+          { id:"denominazione", label:"Denominazione del Centro", type:"text", required:true },
+          { id:"tipologia_centro", label:"Tipologia di Centro", type:"select", required:true, options:[
+            {v:"interuniversitario", t:"Centro Interuniversitario"},
+            {v:"interdipartimentale", t:"Centro Interdipartimentale"},
+            {v:"servizi", t:"Centro di Servizi"},
+            {v:"ateneo", t:"Centro di Ateneo"}
+          ]},
+          { id:"anno_riferimento", label:"Anno di riferimento attività (es. 2025)", type:"number", required:true, min:2000, max:2100 },
+          { id:"dotato_budget", label:"La struttura è dotata di budget?", type:"select", required:true, options:[
+            {v:"si", t:"Sì"},
+            {v:"no", t:"No"}
+          ]},
+          { id:"relazione_economica", label:"Relazione consuntiva annuale economica (sintesi o riferimento documento)", type:"textarea", required:false },
+          { id:"introiti_medi_annui", label:"Per Centri di Servizi: introiti medi annui (€, se applicabile)", type:"number", required:false, min:0, step:"0.01" },
+          { id:"relazione_scientifica", label:"Relazione consuntiva annuale scientifica (prodotti, finanziamenti, avanzamento, collaborazioni, risultati)", type:"textarea", required:true },
+          { id:"programma_anno_successivo", label:"Programma attività anno successivo", type:"textarea", required:true },
+          { id:"nominativi_docenti", label:"Nominativi docenti afferenti (uno per riga)", type:"textarea", required:true },
+          { id:"personale_tab", label:"Personale TAB assegnato (se presente) – uno per riga", type:"textarea", required:false },
+          { id:"organi_composizione", label:"Composizione Organi del Centro (ruoli e nominativi)", type:"textarea", required:true },
+          { id:"ambiti_linee_ricerca", label:"Ambiti e linee di ricerca sviluppate", type:"textarea", required:true }
+        ],
+        requiredDocs: [
+          "Relazione consuntiva annuale (economica se dotato di budget / per centri di servizi anche introiti medi annui)",
+          "Relazione consuntiva annuale scientifica",
+          "Programma attività anno successivo"
+        ]
+      }
+    };
+
+    // -------------------------
+    // State
+    // -------------------------
+    const state = {
+      step: 1,
+      annex: "",
+      values: {},
+      files: [],
+      completedAnnexes: {} // {A:{payload, savedAtISO}}
+    };
+
+    // -------------------------
+    // Pratica (multi-allegato) + IndexedDB (salvataggio completo, inclusi PDF/JPEG)
+    // -------------------------
+    const PRACTICE_KEY = 'unipa_centri_practice_v1';
+    const PRACTICE_ID_KEY = 'unipa_centri_practice_id_v1';
+    const DB_NAME = 'unipa_centri_db_v1';
+    const DB_STORE = 'attachments';
+
+    function getPracticeId(){
+      let id = localStorage.getItem(PRACTICE_ID_KEY);
+      if(!id){
+        id = 'PRACT_' + Math.random().toString(16).slice(2) + '_' + Date.now();
+        localStorage.setItem(PRACTICE_ID_KEY, id);
+      }
+      return id;
+    }
+
+    const practice = {
+      id: getPracticeId(),
+      meta: { ufficio:'', area:'', responsabile:'', riferimento:'', include:'si', privacy:'standard', note:'' },
+      annexes: {}
+    };
+
+    function loadPractice(){
+      try{
+        const raw = localStorage.getItem(PRACTICE_KEY);
+        if(!raw) return;
+        const data = JSON.parse(raw);
+        if(data && data.id === practice.id){
+        if(data.annexes) practice.annexes = data.annexes;
+        if(data.meta) practice.meta = { ...practice.meta, ...data.meta };
+      }
+      }catch(e){}
+    }
+
+    function savePractice(){
+      try{
+        localStorage.setItem(PRACTICE_KEY, JSON.stringify({ id: practice.id, meta: practice.meta, annexes: practice.annexes }));
+      }catch(e){}
+    }
+
+    // ---- IndexedDB helpers
+    let _dbPromise = null;
+    function openDB(){
+      if(_dbPromise) return _dbPromise;
+      _dbPromise = new Promise((resolve, reject)=>{
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = ()=>{
+          const db = req.result;
+          const store = db.createObjectStore(DB_STORE, { keyPath:'attId' });
+          store.createIndex('byPracticeAnnex', ['practiceId','annex'], { unique:false });
+        };
+        req.onsuccess = ()=> resolve(req.result);
+        req.onerror = ()=> reject(req.error);
+      });
+      return _dbPromise;
+    }
+
+    async function dbPutAttachment(annex, file){
+      const db = await openDB();
+      const attId = 'ATT_' + Math.random().toString(16).slice(2) + '_' + Date.now();
+      const rec = {
+        attId,
+        practiceId: practice.id,
+        annex,
+        name: file.name,
+        type: file.type || '',
+        size: file.size || 0,
+        blob: file
+      };
+      await new Promise((resolve, reject)=>{
+        const tx = db.transaction(DB_STORE,'readwrite');
+        tx.objectStore(DB_STORE).put(rec);
+        tx.oncomplete = resolve;
+        tx.onerror = ()=> reject(tx.error);
+      });
+      return { attId, name: rec.name, type: rec.type, size: rec.size };
+    }
+
+    async function dbDeleteAttachment(attId){
+      const db = await openDB();
+      await new Promise((resolve, reject)=>{
+        const tx = db.transaction(DB_STORE,'readwrite');
+        tx.objectStore(DB_STORE).delete(attId);
+        tx.oncomplete = resolve;
+        tx.onerror = ()=> reject(tx.error);
+      });
+    }
+
+    async function dbListAttachments(annex){
+      const db = await openDB();
+      return await new Promise((resolve, reject)=>{
+        const tx = db.transaction(DB_STORE,'readonly');
+        const idx = tx.objectStore(DB_STORE).index('byPracticeAnnex');
+        const req = idx.getAll([practice.id, annex]);
+        req.onsuccess = ()=>{
+          const rows = (req.result||[]).map(r=>({ attId:r.attId, name:r.name, type:r.type, size:r.size }));
+          resolve(rows);
+        };
+        req.onerror = ()=> reject(req.error);
+      });
+    }
+
+    async function dbGetBlob(attId){
+      const db = await openDB();
+      return await new Promise((resolve, reject)=>{
+        const tx = db.transaction(DB_STORE,'readonly');
+        const req = tx.objectStore(DB_STORE).get(attId);
+        req.onsuccess = ()=> resolve(req.result ? req.result.blob : null);
+        req.onerror = ()=> reject(req.error);
+      });
+    }
+
+    // -------------------------
+    // Elements
+    // -------------------------
+    const el = (id) => document.getElementById(id);
+
+    const stepEls = {
+      1: el("step1"),
+      2: el("step2"),
+      3: el("step3"),
+      4: el("step4"),
+    };
+
+    const stepsBadgeEls = Array.from(document.querySelectorAll(".step"));
+    const pillAnnex = el("pillAnnex");
+    const annexSel = el("annex");
+    const submissionTypeSel = el("submissionType");
+
+    // Cache opzioni Allegato (Safari: option.hidden non e' affidabile)
+    const _annexAllOptions = Array.from(annexSel.options).map(o=>({ value:o.value, text:o.text }));
+
+    // -------------------------
+    // Filtro Allegati per Tipo pratica (step 1)
+    // -------------------------
+    function getFilteredAnnexCodes(){
+      const t = submissionTypeSel.value;
+      const all = ['A','B','C','D','E','F','G','H','I','L','M','N'];
+      // mostra solo gli allegati coerenti con il tipo pratica selezionato
+      return all.filter(code => (annexSchemas[code]?.submissionType || '') === t);
+    }
+
+    function applyAnnexFilter(){
+      const visible = new Set(getFilteredAnnexCodes());
+      state.annexFilter = submissionTypeSel.value;
+
+      // Filtra il menu a tendina Allegato (compatibile Safari): ricostruisce le opzioni
+      const current = annexSel.value;
+      annexSel.innerHTML = '';
+      _annexAllOptions.forEach(o=>{
+        if(!o.value){
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = o.text;
+          annexSel.appendChild(opt);
+          return;
+        }
+        if(visible.has(o.value)){
+          const opt = document.createElement('option');
+          opt.value = o.value;
+          opt.textContent = o.text;
+          annexSel.appendChild(opt);
+        }
+      });
+
+      // ripristina selezione se ancora valida
+      if(current && visible.has(current)) annexSel.value = current;
+
+      // Se l'allegato selezionato non e' compatibile, resetta selezione
+      if(state.annex && !visible.has(state.annex)){
+        state.annex = '';
+        annexSel.value = '';
+        pillAnnex.textContent = 'Allegato: —';
+        state.values = {};
+        state.files = [];
+        dynamicFields.innerHTML = '';
+        summary.innerHTML = '';
+      }
+
+      // Aggiorna dashboard pratica
+      renderPracticeDashboard();
+    }
+
+    const dynamicFields = el("dynamicFields");
+    const fileInput = el("fileInput");
+    const fileList = el("fileList");
+    const summary = el("summary");
+
+    
+
+    // -------------------------
+    // Theme
+    // -------------------------
+    const THEME_KEY = "unipa_centri_modulo_theme_v1";
+
+    function applyTheme(theme){
+      document.body.setAttribute("data-theme", theme);
+      try{ localStorage.setItem(THEME_KEY, theme); }catch(e){}
+    }
+
+    function initTheme(){
+      let t = "unipa-dark";
+      try{ t = localStorage.getItem(THEME_KEY) || "unipa-dark"; }catch(e){}
+      const sel = document.getElementById("themeSelect");
+      if(sel){
+        // se il tema salvato non esiste piu' nel menu, fallback
+        if(!Array.from(sel.options).some(o=>o.value===t)) t = 'unipa-dark';
+        sel.value = t;
+        sel.addEventListener("change", ()=> applyTheme(sel.value));
+      }
+      applyTheme(t);
+    }
+
+    // -------------------------
+    // Utilities
+    // -------------------------
+    function setStep(n){
+      state.step = n;
+      Object.keys(stepEls).forEach(k=>{
+        stepEls[k].classList.toggle("hidden", Number(k)!==n);
+      });
+      stepsBadgeEls.forEach(s=>{
+        s.classList.toggle("active", Number(s.dataset.step)===n);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function schema(){
+      return annexSchemas[state.annex] || null;
+    }
+
+    function setErr(step, msg){
+      const box = el("err"+step);
+      if(!box) return;
+      box.textContent = msg || "";
+      box.style.display = msg ? "block" : "none";
+    }
+
+    function setOk(step, msg){
+      const box = el("ok"+step);
+      if(!box) return;
+      box.textContent = msg || "";
+      box.style.display = msg ? "block" : "none";
+    }
+
+    // -------------------------
+    // Render dynamic fields
+    // -------------------------
+    function renderFields(){
+      // reset any currently rendered dynamic inputs
+      document.querySelectorAll('#dynamicFields input, #dynamicFields textarea, #dynamicFields select').forEach(x=>{ try{x.value='';}catch(e){} });
+      dynamicFields.innerHTML = "";
+      const sc = schema();
+      if(!sc){
+        dynamicFields.innerHTML = `<div class="err" style="display:block">Seleziona un Allegato nello step 1.</div>`;
+        return;
+      }
+
+      // Help card inside step2
+      const help = document.createElement("div");
+      help.className = "side-item";
+      help.innerHTML = `
+        <b>${escapeHtml(sc.label)}</b>
+        <p>Compila i campi di seguito. I campi con “OBBLIGATORIO” devono essere compilati.</p>
+        <p class="small">Documenti tipicamente richiesti: ${escapeHtml((sc.requiredDocs||[]).join(" • "))}</p>
+      `;
+      dynamicFields.appendChild(help);
+
+      const hr = document.createElement("div");
+      hr.className = "hr";
+      dynamicFields.appendChild(hr);
+
+      // Fields
+      sc.fields.forEach(f=>{
+        const wrap = document.createElement("div");
+        wrap.style.marginBottom = "12px";
+
+        const label = document.createElement("label");
+        label.htmlFor = f.id;
+        label.innerHTML = `${escapeHtml(f.label)} ${f.required ? '<span class="req">OBBLIGATORIO</span>' : ''}`;
+        wrap.appendChild(label);
+
+        let input;
+        if(f.type === "textarea"){
+          input = document.createElement("textarea");
+          input.placeholder = f.placeholder || "";
+        } else if (f.type === "select"){
+          input = document.createElement("select");
+          (f.options || []).forEach(opt=>{
+            const o = document.createElement("option");
+            o.value = opt.v;
+            o.textContent = opt.t;
+            input.appendChild(o);
+          });
+          const empty = document.createElement("option");
+          empty.value = "";
+          empty.textContent = "— Seleziona —";
+          input.insertBefore(empty, input.firstChild);
+          input.value = "";
+        } else {
+          input = document.createElement("input");
+          input.type = f.type || "text";
+          if(f.min != null) input.min = f.min;
+          if(f.max != null) input.max = f.max;
+          if(f.step != null) input.step = f.step;
+          if(f.placeholder) input.placeholder = f.placeholder;
+        }
+
+        input.id = f.id;
+        input.dataset.required = f.required ? "1" : "0";
+        input.dataset.fieldType = f.type;
+        input.value = (state.values[f.id] ?? "");
+
+        input.addEventListener("input", () => {
+          state.values[f.id] = input.value;
+        });
+        input.addEventListener("change", () => {
+          state.values[f.id] = input.value;
+          if(state.annex === "N") refreshMonitoraggioRules();
+        });
+
+        wrap.appendChild(input);
+
+        if(f.hint){
+          const hint = document.createElement("div");
+          hint.className = "hint";
+          hint.textContent = f.hint;
+          wrap.appendChild(hint);
+        }
+        dynamicFields.appendChild(wrap);
+      });
+
+      // Special rules for N
+      if(state.annex === "N"){
+        refreshMonitoraggioRules();
+      }
+    }
+
+    function refreshMonitoraggioRules(){
+      // Allegato N: relazione economica obbligatoria solo se dotato budget = si,
+      // introiti medi annui richiesti solo se tipologia = servizi (non forziamo, ma evidenziamo).
+      const dotato = state.values["dotato_budget"];
+      const tip = state.values["tipologia_centro"];
+
+      const relEco = document.getElementById("relazione_economica");
+      const introiti = document.getElementById("introiti_medi_annui");
+
+      if(relEco){
+        const parentLabel = relEco.previousSibling; // label
+        const shouldReq = (dotato === "si");
+        relEco.dataset.required = shouldReq ? "1" : "0";
+        if(parentLabel && parentLabel.tagName === "LABEL"){
+          parentLabel.innerHTML = `Relazione consuntiva annuale economica (sintesi o riferimento documento) ${shouldReq ? '<span class="req">OBBLIGATORIO</span>' : ''}`;
+        }
+      }
+
+      if(introiti){
+        const parentLabel = introiti.previousSibling;
+        const shouldHighlight = (tip === "servizi");
+        if(parentLabel && parentLabel.tagName === "LABEL"){
+          parentLabel.innerHTML = `Per Centri di Servizi: introiti medi annui (€, se applicabile) ${shouldHighlight ? '<span class="req">RILEVANTE</span>' : ''}`;
+        }
+      }
+    }
+
+    // -------------------------
+    // Validation
+    // -------------------------
+    function validateStep1(){
+      setErr(1, "");
+      const st = submissionTypeSel.value;
+      if(!st) return "Seleziona il Tipo pratica.";
+      const annex = annexSel.value;
+      if(!annex) return "Seleziona un Allegato.";
+      return "";
+    }
+
+    function validateStep2(){
+      setErr(2, "");
+      const sc = schema();
+      if(!sc) return "Schema Allegato non disponibile.";
+      const errors = [];
+
+      // Required fields
+      sc.fields.forEach(f=>{
+        const v = (state.values[f.id] ?? "").toString().trim();
+        const req = (document.getElementById(f.id)?.dataset.required === "1") || !!f.required;
+        if(req && !v){
+          errors.push(`- Campo obbligatorio mancante: ${f.label}`);
+        }
+        if(f.type === "number" && v){
+          const n = Number(v);
+          if(Number.isNaN(n)) errors.push(`- Valore numerico non valido: ${f.label}`);
+          if(f.min != null && n < f.min) errors.push(`- ${f.label}: valore minimo ${f.min}`);
+          if(f.max != null && n > f.max) errors.push(`- ${f.label}: valore massimo ${f.max}`);
+        }
+      });
+
+      // Specific: durata_anni in A/E must be 3..6 already handled
+      // Specific: Allegato C/F: raccomandazione "almeno 3 mesi prima" (non blocchiamo, ma segnaliamo se possibile)
+      if(state.annex === "C" || state.annex === "F"){
+        const scad = state.values["data_scadenza"];
+        if(scad){
+          try{
+            const scadDt = new Date(scad + "T00:00:00");
+            const now = new Date();
+            const diffDays = (scadDt - now) / (1000*60*60*24);
+            if(diffDays < 90){
+              errors.push(`- Avviso: la scadenza indicata è a meno di 3 mesi da oggi; verificare il requisito “almeno tre mesi prima della scadenza”.`);
+            }
+          }catch(e){}
+        }
+      }
+
+      return errors.length ? errors.join("\n") : "";
+    }
+
+    // Step3: no hard validation
+    function validateStep3(){
+      setErr(3, "");
+      return "";
+    }
+
+    // Step4: validate all
+    function validateAll(){
+      const e1 = validateStep1();
+      if(e1) return e1;
+      const e2 = validateStep2();
+      if(e2) return e2;
+      return "";
+    }
+
+    // -------------------------
+    // Files
+    // -------------------------
+    function renderFiles(){
+      if(!state.files.length){
+        fileList.textContent = 'Nessun file caricato.';
+        return;
+      }
+      fileList.innerHTML = '';
+      state.files.forEach((f, idx)=>{
+        const row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML = `
+          <div class="meta">
+            <div class="name">${escapeHtml(f.name)}</div>
+            <div class="desc">${escapeHtml((f.type||'—') + ' • ' + Math.round((f.size||0)/1024) + ' KB')}</div>
+          </div>
+          <button class="btn-danger" type="button">Rimuovi</button>
+        `;
+        row.querySelector('button').addEventListener('click', async ()=>{
+          try{ if(f.attId) await dbDeleteAttachment(f.attId); }catch(e){}
+          state.files.splice(idx,1);
+          renderFiles();
+          persistCurrentAnnex(false);
+          renderPracticeDashboard();
+        });
+        fileList.appendChild(row);
+      });
+    }
+
+    fileInput.addEventListener("change", async (ev)=>{
+      const files = Array.from(ev.target.files || []);
+      const allowed = files.filter(f=>{
+        const t = (f.type||'').toLowerCase();
+        const n = (f.name||'').toLowerCase();
+        return t === 'application/pdf' || t === 'image/jpeg' || n.endsWith('.pdf') || n.endsWith('.jpg') || n.endsWith('.jpeg');
+      });
+      for(const f of allowed){
+        const meta = await dbPutAttachment(state.annex || annexSel.value || '', f);
+        state.files.push({ ...meta });
+      }
+      fileInput.value = '';
+      renderFiles();
+      persistCurrentAnnex(false);
+      renderPracticeDashboard();
+    });
+
+    // -------------------------
+    // Summary
+    // -------------------------
+    function buildPayload(includeFileMetaOnly=true){
+      const sc = schema();
+      const payload = {
+        allegato: state.annex,
+        allegato_label: sc?.label || "",
+        tipo_pratica: submissionTypeSel.value,
+        destinatario: el("toRector").value || "",
+        data_richiesta: el("requestDate").value || "",
+        campi: { ...state.values },
+        allegati_note: el("fileNote").value || "",
+        allegati: includeFileMetaOnly
+          ? state.files.map(f=>({ name:f.name, size:f.size, type:f.type }))
+          : state.files
+      };
+      return payload;
+    }
+
+    // -------------------------
+    // PDF utilities (UNIPA style)
+    // -------------------------
+    const UNIPA = {
+      blue: "#003A70",
+      lightBlue: "#E6F0FA",
+      gray: "#666",
+      border: "#d0d7de"
+    };
+
+    function pdfWrapOffscreen(node){
+      // html2pdf/html2canvas can return blank output if the node is not attached to DOM.
+      node.style.position = "fixed";
+      node.style.left = "-10000px";
+      node.style.top = "0";
+      node.style.width = "800px"; // stable rendering width
+      node.style.background = "#fff";
+      node.style.zIndex = "-1";
+      document.body.appendChild(node);
+      return () => {
+        try{ node.remove(); }catch(e){}
+      };
+    }
+
+    function buildUnipaAnnexSection(payload){
+      const sc = annexSchemas[payload.allegato] || null;
+      const label = sc?.label || ("Allegato " + (payload.allegato || "—"));
+      const fields = (sc?.fields || []).map(f => {
+        const v = (payload.campi?.[f.id] ?? "").toString().trim();
+        return `
+          <tr>
+            <td style="width:35%; padding:8px; border:1px solid ${UNIPA.border}; vertical-align:top; font-weight:700;">${escapeHtml(f.label)}</td>
+            <td style="padding:8px; border:1px solid ${UNIPA.border}; white-space:pre-wrap;">${escapeHtml(v || "—")}</td>
+          </tr>
+        `;
+      }).join("");
+
+      const fileList = (payload.allegati && payload.allegati.length)
+        ? payload.allegati.map(a => `${escapeHtml(a.name)} (${Math.round((a.size||0)/1024)} KB)`).join("<br/>")
+        : "—";
+
+      return `
+        <div class="pdf-page">
+          <div style="border:1px solid ${UNIPA.border};">
+            <div style="background:${UNIPA.blue}; color:#fff; padding:14px 16px;">
+              <div style="font-size:14px; font-weight:800; letter-spacing:.2px;">Università degli Studi di Palermo</div>
+              <div style="font-size:12px; opacity:.95; margin-top:2px;">Modulo Proposte / Regolamenti / Monitoraggio Centri</div>
+            </div>
+            <div style="padding:16px;">
+              <div style="text-align:center; font-size:15px; font-weight:800; color:${UNIPA.blue}; margin:6px 0 12px 0;">${escapeHtml(label)}</div>
+
+              <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:12px;">
+                <tr>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border}; background:${UNIPA.lightBlue}; font-weight:700;">Allegato</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border};">${escapeHtml(payload.allegato || "—")}</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border}; background:${UNIPA.lightBlue}; font-weight:700;">Tipo pratica</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border};">${escapeHtml(payload.tipo_pratica || "—")}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border}; background:${UNIPA.lightBlue}; font-weight:700;">Destinatario</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border};">${escapeHtml(payload.destinatario || "—")}</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border}; background:${UNIPA.lightBlue}; font-weight:700;">Data richiesta</td>
+                  <td style="padding:8px; border:1px solid ${UNIPA.border};">${escapeHtml(payload.data_richiesta || "—")}</td>
+                </tr>
+              </table>
+
+              <div style="font-size:12px; font-weight:800; color:${UNIPA.blue}; margin:10px 0 6px 0;">Dati e campi</div>
+              <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                ${fields || `
+                  <tr>
+                    <td style="padding:8px; border:1px solid ${UNIPA.border};">—</td>
+                  </tr>
+                `}
+              </table>
+
+              <div style="font-size:12px; font-weight:800; color:${UNIPA.blue}; margin:12px 0 6px 0;">Allegati</div>
+              <div style="border:1px solid ${UNIPA.border}; padding:10px; font-size:12px;">
+                <div style="margin-bottom:6px;"><b>Note:</b> <span style="white-space:pre-wrap;">${escapeHtml(payload.allegati_note || "—")}</span></div>
+                <div><b>File caricati (metadati):</b><br/>${fileList}</div>
+              </div>
+
+              <div style="margin-top:14px; font-size:10px; color:${UNIPA.gray}; display:flex; justify-content:space-between;">
+                <div>Generato dal modulo web</div>
+                <div>${escapeHtml(new Date().toLocaleString())}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveCompletedAnnex(payload){
+      state.completedAnnexes[payload.allegato] = {
+        payload: JSON.parse(JSON.stringify(payload)),
+        savedAtISO: new Date().toISOString()
+      };
+      updateAllPdfButton();
+    }
+
+    function updateAllPdfButton(){
+      const btn = document.getElementById('btnDownloadAllPDF');
+      if(!btn) return;
+      const n = Object.keys(state.completedAnnexes || {}).length;
+      btn.disabled = (n === 0);
+      btn.title = n ? `Genera un PDF unico con ${n} Allegato/i salvati` : 'Compila e genera almeno un Allegato (Scarica PDF Allegato)';
+      btn.textContent = n ? `PDF unico (allegati: ${n})` : 'PDF unico (tutti gli allegati)';
+      btn.style.opacity = n ? '1' : '.55';
+      btn.style.cursor = n ? 'pointer' : 'not-allowed';
+    }
+
+    // -------------------------
+    // PDF generation (robust): jsPDF (no html2canvas)
+    // -------------------------
+    function getJsPDF(){
+      return (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : null;
+    }
+
+    // -------------------------
+    // Attachment merge: append PDF pages and images (JPG/PNG/WebP)
+    // Requires: pdf-lib (PDFLib global)
+    // -------------------------
+    async function fileToArrayBuffer(file){
+      return await file.arrayBuffer();
+    }
+
+    async function webpToPngArrayBuffer(file){
+      // Convert WEBP to PNG via canvas (if browser supports decoding WEBP)
+      const blob = file instanceof Blob ? file : new Blob([file]);
+      const url = URL.createObjectURL(blob);
+      try{
+        const img = new Image();
+        img.decoding = 'async';
+        await new Promise((res, rej)=>{
+          img.onload = ()=>res(null);
+          img.onerror = ()=>rej(new Error('Immagine non decodificabile'));
+          img.src = url;
+        });
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const dataUrl = canvas.toDataURL('image/png');
+        const bstr = atob(dataUrl.split(',')[1]);
+        const n = bstr.length;
+        const u8 = new Uint8Array(n);
+        for(let i=0;i<n;i++) u8[i]=bstr.charCodeAt(i);
+        return u8.buffer;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    async function mergeMainPdfWithAttachments(mainPdfArrayBuffer){
+      if(!window.PDFLib){
+        throw new Error('pdf-lib non disponibile (verifica connessione o blocco CDN).');
+      }
+      const { PDFDocument } = window.PDFLib;
+
+      const stats = { embeddedFiles: 0, embeddedPdfPages: 0, embeddedImagePages: 0 };
+
+      const outDoc = await PDFDocument.create();
+
+      // 1) Main PDF
+      const mainDoc = await PDFDocument.load(mainPdfArrayBuffer);
+      const mainPages = await outDoc.copyPages(mainDoc, mainDoc.getPageIndices());
+      mainPages.forEach(p => outDoc.addPage(p));
+
+      // 2) Attachments: append PDF pages and images (PDF/JPEG) from IndexedDB
+      for(const f of (state.files || [])){
+        const name = (f.name || '').toLowerCase();
+        const type = (f.type || '').toLowerCase();
+
+        const isPdf = type.includes('pdf') || name.endsWith('.pdf');
+        const isJpg = type.includes('jpeg') || type.includes('jpg') || name.endsWith('.jpg') || name.endsWith('.jpeg');
+
+        let blob = null;
+        if(f._ref){
+          blob = f._ref;
+        } else if(f.attId){
+          blob = await dbGetBlob(f.attId);
+        }
+        if(!blob) continue;
+
+        if(isPdf){
+          const bytes = await fileToArrayBuffer(blob);
+          const attDoc = await PDFDocument.load(bytes);
+          const pages = await outDoc.copyPages(attDoc, attDoc.getPageIndices());
+          pages.forEach(p => outDoc.addPage(p));
+          stats.embeddedFiles += 1;
+          stats.embeddedPdfPages += pages.length;
+          continue;
+        }
+
+        if(isJpg){
+          const bytes = await fileToArrayBuffer(blob);
+          const img = await outDoc.embedJpg(bytes);
+          const page = outDoc.addPage([595.28, 841.89]);
+          const { width, height } = page.getSize();
+          const dims = img.scale(1);
+          const scale = Math.min(width / dims.width, height / dims.height);
+          const w = dims.width * scale;
+          const h = dims.height * scale;
+          const x = (width - w) / 2;
+          const y = (height - h) / 2;
+          page.drawImage(img, { x, y, width: w, height: h });
+          stats.embeddedFiles += 1;
+          stats.embeddedImagePages += 1;
+          continue;
+        }
+      }
+
+      const bytes = await outDoc.save();
+      return { bytes, stats };
+    }
+
+    function pdfHeader(doc, title){
+      // UNIPA header bar
+      doc.setFillColor(0, 58, 112);
+      doc.rect(0, 0, 210, 22, 'F');
+      doc.setTextColor(255,255,255);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(12);
+      doc.text('Universita degli Studi di Palermo', 12, 10);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(10);
+      doc.text('Modulo Proposte / Regolamenti / Monitoraggio Centri', 12, 16);
+
+      doc.setTextColor(0,0,0);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(12);
+      doc.text(title, 12, 30);
+
+      // divider
+      doc.setDrawColor(220);
+      doc.line(12, 33, 198, 33);
+      return 38; // start Y
+    }
+
+    function pdfAddWrapped(doc, text, x, y, maxWidth, lineHeight){
+      const lines = doc.splitTextToSize(String(text ?? ''), maxWidth);
+      doc.text(lines, x, y);
+      return y + (lines.length * lineHeight);
+    }
+
+    function pdfEnsureSpace(doc, y, needed){
+      if(y + needed <= 287) return y;
+      doc.addPage();
+      return 20;
+    }
+
+    function buildAnnexPdf(doc, payload, withCover){
+      const sc = annexSchemas[payload.allegato] || null;
+      const label = sc?.label || ('Allegato ' + (payload.allegato || '—'));
+
+      if(withCover){
+        let y = pdfHeader(doc, label);
+
+        // Metadata table-like
+        doc.setFontSize(10);
+        doc.setFont('helvetica','bold');
+        doc.text('Allegato:', 12, y);
+        doc.setFont('helvetica','normal');
+        doc.text(String(payload.allegato || '—'), 40, y);
+
+        doc.setFont('helvetica','bold');
+        doc.text('Tipo pratica:', 90, y);
+        doc.setFont('helvetica','normal');
+        doc.text(String(payload.tipo_pratica || '—'), 125, y);
+        y += 7;
+
+        doc.setFont('helvetica','bold');
+        doc.text('Destinatario:', 12, y);
+        doc.setFont('helvetica','normal');
+        y = pdfAddWrapped(doc, payload.destinatario || '—', 40, y, 150, 5);
+
+        doc.setFont('helvetica','bold');
+        doc.text('Data richiesta:', 12, y);
+        doc.setFont('helvetica','normal');
+        doc.text(String(payload.data_richiesta || '—'), 40, y);
+        y += 9;
+
+        // Section title
+        doc.setFont('helvetica','bold');
+        doc.setTextColor(0,58,112);
+        doc.text('Campi', 12, y);
+        doc.setTextColor(0,0,0);
+        y += 6;
+
+        doc.setFontSize(9.5);
+        (sc?.fields || []).forEach(f => {
+          const v = (payload.campi?.[f.id] ?? '').toString().trim() || '—';
+          y = pdfEnsureSpace(doc, y, 18);
+          doc.setFont('helvetica','bold');
+          y = pdfAddWrapped(doc, f.label, 12, y, 60, 5);
+          // align value with label block
+          const yValStart = y - 5; // approximate
+          doc.setFont('helvetica','normal');
+          const afterVal = pdfAddWrapped(doc, v, 75, yValStart, 123, 5);
+          y = Math.max(y, afterVal) + 3;
+          doc.setDrawColor(230);
+          doc.line(12, y, 198, y);
+          y += 4;
+        });
+
+        y = pdfEnsureSpace(doc, y, 25);
+        doc.setFont('helvetica','bold');
+        doc.setTextColor(0,58,112);
+        doc.text('Allegati', 12, y);
+        doc.setTextColor(0,0,0);
+        y += 6;
+
+        doc.setFont('helvetica','bold');
+        doc.text('Note:', 12, y);
+        doc.setFont('helvetica','normal');
+        y = pdfAddWrapped(doc, payload.allegati_note || '—', 25, y, 173, 5);
+        y += 2;
+
+        doc.setFont('helvetica','bold');
+        doc.text('File caricati:', 12, y);
+        doc.setFont('helvetica','normal');
+        const files = (payload.allegati && payload.allegati.length)
+          ? payload.allegati.map(a => `${a.name} (${Math.round((a.size||0)/1024)} KB)`).join('\n')
+          : '—';
+        y = pdfAddWrapped(doc, files, 35, y, 163, 5);
+
+        // Footer
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Generato dal Modulo Centri UniPA', 12, 295);
+        doc.setTextColor(0,0,0);
+      }
+    }
+
+    function generateAllAnnexesPDF(){
+      setErr(1, '');
+      const keys = Object.keys(state.completedAnnexes || {});
+      if(!keys.length){
+        alert('Nessun Allegato salvato. Genera almeno un PDF Allegato dallo step 4.');
+        return;
+      }
+
+      const JsPDF = getJsPDF();
+      const ts = new Date().toISOString().slice(0,19).replaceAll(':','-');
+      if(!JsPDF){
+        alert('jsPDF non disponibile (verifica connessione o blocco CDN).');
+        return;
+      }
+
+      const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'portrait' });
+      const sorted = keys.sort();
+      sorted.forEach((k, idx) => {
+        if(idx>0) doc.addPage();
+        buildAnnexPdf(doc, state.completedAnnexes[k].payload, true);
+      });
+      doc.save(`Allegati_UNIPA_${ts}.pdf`);
+    }
+
+    // -------------------------
+    // PDF generation (one PDF per Allegato): jsPDF
+    // -------------------------
+    async function generateAllegatoPDF(){
+      setErr(4, ""); setOk(4, "");
+      const err = validateAll();
+      if(err){ setErr(4, err); return; }
+
+      const payload = buildPayload(true);
+      // Save for "PDF unico" workflow
+      saveCompletedAnnex(payload);
+
+      const JsPDF = getJsPDF();
+      if(!JsPDF){
+        setErr(4, 'jsPDF non disponibile (verifica connessione o blocco CDN).');
+        return;
+      }
+
+      try{
+        const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'portrait' });
+        buildAnnexPdf(doc, payload, true);
+
+        // jsPDF -> bytes
+        const mainBytes = doc.output('arraybuffer');
+
+        // Merge with attachments (PDF + images)
+        const merged = await mergeMainPdfWithAttachments(mainBytes);
+        const mergedBytes = merged.bytes;
+        const mergeStats = merged.stats;
+
+        const ts = new Date().toISOString().slice(0,19).replaceAll(":","-");
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Allegato_${payload.allegato || "X"}_${ts}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+
+        setOk(4, `PDF dell’Allegato generato correttamente. Pagine allegati aggiunte: ${mergeStats.embeddedPdfPages} da PDF, ${mergeStats.embeddedImagePages} da immagini (pagine aggiunte: ${(mergeStats.embeddedPdfPages + mergeStats.embeddedImagePages)}). Allegati salvati: ${Object.keys(state.completedAnnexes).length}.`);
+      }catch(e){
+        setErr(4, 'Errore generazione PDF con allegati: ' + (e?.message || e));
+      }
+    }
+
+    function renderSummary(){
+      summary.innerHTML = "";
+      const payload = buildPayload(true);
+
+      const addKV = (k, v)=>{
+        const div = document.createElement("div");
+        div.className = "kv";
+        div.innerHTML = `<div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(v)}</div>`;
+        summary.appendChild(div);
+      };
+
+      addKV("Allegato", `${payload.allegato} — ${payload.allegato_label}`);
+      addKV("Tipo pratica", payload.tipo_pratica);
+      addKV("Destinatario", payload.destinatario || "—");
+      addKV("Data richiesta", payload.data_richiesta || "—");
+
+      const sc = schema();
+      addKV("Campi compilati", Object.keys(payload.campi).length ? "" : "—");
+      (sc?.fields || []).forEach(f=>{
+        const v = (payload.campi[f.id] ?? "").toString().trim();
+        addKV(f.label, v || "—");
+      });
+
+      addKV("Note allegati", payload.allegati_note || "—");
+      addKV("File caricati (metadati)", payload.allegati.length ? payload.allegati.map(a=>`${a.name} (${Math.round(a.size/1024)} KB)`).join("\n") : "—");
+    }
+
+    
+
+    // -------------------------
+    // Pratica: persist/load Allegato corrente
+    // -------------------------
+    function countMissingRequired(annexCode, values){
+      const sc = annexSchemas[annexCode];
+      if(!sc) return 0;
+      let missing = 0;
+      sc.fields.forEach(f=>{
+        const v = (values?.[f.id] ?? '').toString().trim();
+        let req = !!f.required;
+        if(annexCode === 'N' && f.id === 'relazione_economica'){
+          req = (values?.dotato_budget === 'si');
+        }
+        if(req && !v) missing++;
+      });
+      return missing;
+    }
+
+    async function loadAnnexFromPractice(annexCode){
+      const entry = practice.annexes[annexCode];
+      state.values = entry?.values || {};
+      el('fileNote').value = entry?.fileNote || '';
+      // files from IndexedDB
+      state.files = await dbListAttachments(annexCode);
+      renderFields();
+      renderFiles();
+    }
+
+    function persistCurrentAnnex(markCompleted){
+      if(!state.annex) return;
+      const entry = practice.annexes[state.annex] || {};
+      entry.values = { ...state.values };
+      entry.fileNote = el('fileNote').value || '';
+      entry.submissionType = submissionTypeSel.value;
+      entry.toRector = el('toRector').value || '';
+      entry.requestDate = el('requestDate').value || '';
+      entry.updatedAtISO = new Date().toISOString();
+      entry.completed = markCompleted ? true : (entry.completed || false);
+      practice.annexes[state.annex] = entry;
+      savePractice();
+    }
+
+    function buildPayloadForAnnexFromEntry(annexCode, entry){
+      const sc = annexSchemas[annexCode];
+      return {
+        allegato: annexCode,
+        allegato_label: sc?.label || '',
+        tipo_pratica: entry?.submissionType || (sc?.submissionType || submissionTypeSel.value || 'nuova'),
+        destinatario: entry?.toRector || el('toRector').value || '',
+        data_richiesta: entry?.requestDate || el('requestDate').value || '',
+        campi: { ...(entry?.values || {}) },
+        allegati_note: entry?.fileNote || '',
+        allegati: (entry?.filesMeta || [])
+      };
+    }
+
+    async function refreshEntryFilesMeta(annexCode){
+      const entry = practice.annexes[annexCode] || {};
+      const files = await dbListAttachments(annexCode);
+      entry.filesMeta = files.map(f=>({ name:f.name, size:f.size, type:f.type, attId:f.attId }));
+      practice.annexes[annexCode] = entry;
+      savePractice();
+    }
+
+    function renderPracticeDashboard(){
+      const dash = document.getElementById('practiceDashboard');
+      const statsEl = document.getElementById('practiceStats');
+      const btn = document.getElementById('btnGenerateFascicolo');
+      if(!dash || !statsEl || !btn) return;
+
+      const orderAll = ['A','B','C','D','E','F','G','H','I','L','M','N'];
+      const filter = submissionTypeSel.value;
+      const order = orderAll.filter(c => (annexSchemas[c]?.submissionType || '') === filter);
+      dash.innerHTML = '';
+      let completed = 0;
+      let present = 0;
+
+      const hasAnyData = (entry)=>{
+        if(!entry) return false;
+        const v = entry.values || {};
+        const anyValue = Object.values(v).some(x => String(x ?? '').trim().length > 0);
+        const anyFiles = (entry.filesMeta || entry.files || []).length > 0;
+        return anyValue || anyFiles || !!entry.completed;
+      };
+
+      order.forEach(code=>{
+        const entry = practice.annexes[code] || {};
+        const missing = countMissingRequired(code, entry.values || {});
+        const isCompleted = !!entry.completed && missing === 0;
+        if(isCompleted) completed++;
+        if(hasAnyData(entry)) present++;
+
+        const div = document.createElement('div');
+        div.className = 'kv dash-row';
+        div.innerHTML = `
+          <div>
+            <div class="k">Allegato ${code}</div>
+            <div class="v small">${escapeHtml(annexSchemas[code]?.label || '')}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="status-badge ${isCompleted ? 'status-ok' : 'status-warn'}">${isCompleted ? 'COMPLETO' : ('DA COMPLETARE • mancanti: ' + missing)}</span>
+            <button type="button" class="btn-primary">Apri</button>
+          </div>
+        `;
+        div.querySelector('button').addEventListener('click', async ()=>{
+          persistCurrentAnnex(false);
+          annexSel.value = code;
+          state.annex = code;
+          pillAnnex.textContent = 'Allegato: ' + (code || '—');
+          const sc = annexSchemas[code];
+          if(sc?.submissionType) submissionTypeSel.value = sc.submissionType;
+          await loadAnnexFromPractice(code);
+          setStep(2);
+        });
+        dash.appendChild(div);
+      });
+
+      statsEl.textContent = `Allegati presenti: ${present} / ${order.length} — completi: ${completed} (Filtro: ${submissionTypeSel.value})`;
+      btn.disabled = (present === 0);
+    }
+
+    async function buildAnnexPdfBytesFromEntry(annexCode, entry){
+      const JsPDF = getJsPDF();
+      if(!JsPDF) throw new Error('jsPDF non disponibile');
+      await refreshEntryFilesMeta(annexCode);
+      const refreshed = practice.annexes[annexCode] || entry;
+      const payload = buildPayloadForAnnexFromEntry(annexCode, refreshed);
+      // inject file list meta for printing
+      payload.allegati = (refreshed.filesMeta || []).map(x=>({ name:x.name, size:x.size, type:x.type }));
+
+      const doc = new JsPDF({ unit:'mm', format:'a4', orientation:'portrait' });
+      buildAnnexPdf(doc, payload, true);
+      const mainBytes = doc.output('arraybuffer');
+
+      // For merge, set state.files temporarily to the files list with attId
+      const oldFiles = state.files;
+      state.files = (refreshed.filesMeta || []).map(x=>({ attId:x.attId, name:x.name, type:x.type, size:x.size }));
+      const merged = await mergeMainPdfWithAttachments(mainBytes);
+      state.files = oldFiles;
+      return merged.bytes;
+    }
+
+    async function generateFascicoloPDF(includeMetaPage){
+      const orderAll = ['A','B','C','D','E','F','G','H','I','L','M','N'];
+      const visibleSet = new Set(getFilteredAnnexCodes());
+      const order = orderAll.filter(c => visibleSet.has(c));
+      const hasAnyData = (entry)=>{
+        if(!entry) return false;
+        const v = entry.values || {};
+        const anyValue = Object.values(v).some(x => String(x ?? '').trim().length > 0);
+        const anyFiles = (entry.filesMeta || entry.files || []).length > 0;
+        return anyValue || anyFiles || !!entry.completed;
+      };
+
+      // Genera il Fascicolo anche se non sono compilati tutti gli Allegati:
+      // includiamo tutti quelli "presenti" (con almeno un dato o almeno un allegato).
+      const selected = order.filter(code => hasAnyData(practice.annexes[code]));
+      if(!selected.length){
+        alert('Nessun Allegato presente da includere nel Fascicolo (compila o salva almeno un Allegato).');
+        return;
+      }
+      if(!window.PDFLib){
+        alert('pdf-lib non disponibile (verifica connessione o blocco CDN).');
+        return;
+      }
+
+      const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+      const out = await PDFDocument.create();
+      const font = await out.embedFont(StandardFonts.Helvetica);
+      const fontBold = await out.embedFont(StandardFonts.HelveticaBold);
+
+      // Pre-generate annex PDFs and page counts
+      const annexDocs = [];
+      for(const code of selected){
+        const entry = practice.annexes[code];
+        const bytes = await buildAnnexPdfBytesFromEntry(code, entry);
+        const d = await PDFDocument.load(bytes);
+        annexDocs.push({ code, bytes, pages: d.getPageCount() });
+      }
+
+      // Meta page inclusion (se compilata e consentita)
+      const metaHasData = !!(practice.meta && (
+        (practice.meta.ufficio||'').trim() || (practice.meta.area||'').trim() ||
+        (practice.meta.responsabile||'').trim() || (practice.meta.riferimento||'').trim() ||
+        (practice.meta.note||'').trim()
+      ));
+      const metaAllowed = !!(practice.meta && (practice.meta.include||'si') === 'si');
+      const metaPages = (includeMetaPage && metaAllowed && metaHasData) ? 1 : 0;
+
+      // Index pagination
+      const linesPerPage = 34;
+      const indexRows = [];
+      // We'll insert a separator page before each annex
+      let currentPage = 1 + metaPages; // cover (page 1) + eventuale pagina metadati
+      // We create index after cover; compute how many index pages
+      // We'll estimate rows = annex count
+      const indexPages = Math.max(1, Math.ceil(annexDocs.length / linesPerPage));
+      currentPage += indexPages;
+      for(const a of annexDocs){
+        currentPage += 1;
+        indexRows.push({ code:a.code, start: currentPage });
+        currentPage += a.pages;
+      }
+
+      // Cover
+      {
+        const p = out.addPage();
+        const { width, height } = p.getSize();
+        p.drawRectangle({ x:0, y:height-90, width, height:90, color: rgb(0.07,0.15,0.35) });
+        p.drawText('UNIVERSITAÀ DEGLI STUDI DI PALERMO', { x:40, y:height-45, size:14, font:fontBold, color: rgb(1,1,1) });
+        p.drawText('Fascicolo Allegati – Centri', { x:40, y:height-75, size:22, font:fontBold, color: rgb(1,1,1) });
+        p.drawText('Generato dal Modulo Centri UniPA (salvataggio locale)', { x:40, y:height-120, size:11, font, color: rgb(0,0,0) });
+        p.drawText('Data: ' + new Date().toLocaleDateString(), { x:40, y:height-140, size:11, font, color: rgb(0,0,0) });
+        p.drawText('Allegati inclusi: ' + annexDocs.map(x=>x.code).join(', '), { x:40, y:height-160, size:11, font, color: rgb(0,0,0), maxWidth: width-80 });
+      }
+
+
+      // Metadati amministrativi (pagina dedicata)
+      if(metaPages === 1){
+        await addMetaPageToFascicolo(out);
+      }
+
+      // Index pages
+      {
+        for(let ip=0; ip<indexPages; ip++){
+          const p = out.addPage();
+          const { width, height } = p.getSize();
+          p.drawText('INDICE', { x:40, y:height-60, size:16, font:fontBold, color: rgb(0,0,0) });
+          let y = height-90;
+          const slice = indexRows.slice(ip*linesPerPage, (ip+1)*linesPerPage);
+          slice.forEach(r=>{
+            p.drawText('Allegato ' + r.code, { x:50, y, size:11, font });
+            p.drawText(String(r.start), { x:width-70, y, size:11, font });
+            y -= 16;
+          });
+        }
+      }
+
+      // Append annexes with separator pages
+      for(const a of annexDocs){
+        {
+          const p = out.addPage();
+          const { width, height } = p.getSize();
+          p.drawRectangle({ x:0, y:height-70, width, height:70, color: rgb(0.07,0.15,0.35) });
+          p.drawText('ALLEGATO ' + a.code, { x:40, y:height-45, size:22, font:fontBold, color: rgb(1,1,1) });
+          const label = annexSchemas[a.code]?.label || '';
+          p.drawText(label, { x:40, y:height-85, size:11, font, color: rgb(0,0,0), maxWidth: width-80 });
+        }
+        const d = await PDFDocument.load(a.bytes);
+        const pages = await out.copyPages(d, d.getPageIndices());
+        pages.forEach(p=> out.addPage(p));
+      }
+
+      // Page numbering (exclude cover optional; we number all except cover here start from 2)
+      const pages = out.getPages();
+      for(let i=1; i<pages.length; i++){
+        const p = pages[i];
+        const { width } = p.getSize();
+        p.drawText(`Pag. ${i+1}/${pages.length}`, { x: width-90, y: 20, size: 9, font, color: rgb(0.4,0.4,0.4) });
+      }
+
+      const outBytes = await out.save();
+      const ts = new Date().toISOString().slice(0,19).replaceAll(':','-');
+      const blob = new Blob([outBytes], { type:'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Fascicolo_Centri_${ts}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+    }
+// -------------------------
+    // Draft save/load
+    // -------------------------
+    const DRAFT_KEY = "unipa_centri_modulo_draft_v1";
+
+    function saveDraft(){
+      const draft = {
+        step: state.step,
+        annex: state.annex,
+        values: state.values,
+        submissionType: submissionTypeSel.value,
+        toRector: el("toRector").value,
+        requestDate: el("requestDate").value,
+        fileNote: el("fileNote").value,
+        // only metadata (cannot persist file blobs)
+        files: state.files.map(f=>({ name:f.name, size:f.size, type:f.type }))
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    }
+
+    function loadDraft(){
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if(!raw) return false;
+      const d = JSON.parse(raw);
+
+      state.annex = d.annex || "";
+      annexSel.value = state.annex;
+
+      submissionTypeSel.value = d.submissionType || "nuova";
+      el("toRector").value = d.toRector || "Magnifico Rettore";
+      el("requestDate").value = d.requestDate || "";
+      el("fileNote").value = d.fileNote || "";
+
+      state.values = d.values || {};
+      state.files = (d.files || []).map(x=>({ ...x, _ref:null }));
+
+      pillAnnex.textContent = "Allegato: " + (state.annex || "—");
+      renderFields();
+      renderFiles();
+      return true;
+    }
+
+    async function clearPracticeStorage(){
+      // Svuota la pratica (campi + file salvati in IndexedDB)
+      try{
+        practice.annexes = {};
+        savePractice();
+      }catch(e){}
+
+      try{
+        const db = await openDB();
+        await new Promise((resolve, reject)=>{
+          const tx = db.transaction(DB_STORE, 'readwrite');
+          const store = tx.objectStore(DB_STORE);
+          const idx = store.index('byPractice');
+          const req = idx.getAllKeys(practice.id);
+          req.onsuccess = ()=>{
+            const keys = req.result || [];
+            keys.forEach(k=> store.delete(k));
+          };
+          tx.oncomplete = resolve;
+          tx.onerror = ()=> reject(tx.error);
+        });
+      }catch(e){}
+    }
+
+function clearAll(){
+      state.step = 1;
+      state.annex = "";
+      state.values = {};
+      state.files = [];
+      // reset valori dei campi dinamici gia' renderizzati (evita autofill/valori residui)
+      try{
+        document.querySelectorAll('#dynamicFields input, #dynamicFields textarea, #dynamicFields select')
+          .forEach(x=>{ x.value=''; });
+      }catch(e){}
+      try{ document.getElementById('fileInput').value=''; }catch(e){}
+      state.completedAnnexes = state.completedAnnexes || {};
+      annexSel.value = "";
+      submissionTypeSel.value = "nuova";
+      el("toRector").value = "Magnifico Rettore";
+      el("requestDate").value = "";
+      el("fileNote").value = "";
+      try{ fileInput.value = ""; }catch(e){}
+      fileList.textContent = "Nessun file caricato.";
+      pillAnnex.textContent = "Allegato: —";
+      dynamicFields.innerHTML = "";
+      summary.innerHTML = "";
+      setErr(1,""); setErr(2,""); setErr(3,""); setErr(4,"");
+      setOk(4,"");
+      // reset metadati amministrativi
+      try{ resetMetaDefaults(); }catch(e){}
+      setStep(1);
+    }
+
+    // -------------------------
+    // Annex change behavior
+    // -------------------------
+
+    submissionTypeSel.addEventListener('change', ()=>{
+      // quando cambia il tipo pratica, filtra gli allegati coerenti
+      applyAnnexFilter();
+    });
+
+    annexSel.addEventListener("change", async ()=>{
+      // salva lo stato corrente prima di cambiare
+      persistCurrentAnnex(false);
+
+      state.annex = annexSel.value;
+      pillAnnex.textContent = 'Allegato: ' + (state.annex || '—');
+
+      // Auto-set submission type
+      const sc = schema();
+      if(sc?.submissionType) submissionTypeSel.value = sc.submissionType;
+
+      // Carica dati salvati (se presenti)
+      state.values = {};
+      el('fileNote').value = '';
+      state.files = [];
+      await loadAnnexFromPractice(state.annex);
+      setErr(1,''); setErr(2,''); setErr(3,''); setErr(4,'');
+      setOk(4,'');
+      renderPracticeDashboard();
+    });
+
+    // -------------------------
+    // Navigation
+    // -------------------------
+    el("next1").addEventListener("click", ()=>{
+      const err = validateStep1();
+      if(err){ setErr(1, err); return; }
+      setErr(1,"");
+      if(!state.annex){
+        state.annex = annexSel.value;
+        const sc = schema();
+        if(sc?.submissionType) submissionTypeSel.value = sc.submissionType;
+        pillAnnex.textContent = "Allegato: " + (state.annex || "—");
+        renderFields();
+      }
+      setStep(2);
+    });
+
+    el("back2").addEventListener("click", ()=> setStep(1));
+    el("next2").addEventListener("click", ()=>{
+      const err = validateStep2();
+      if(err){ setErr(2, err); return; }
+      setErr(2,"");
+      setStep(3);
+    });
+
+    el("back3").addEventListener("click", ()=> setStep(2));
+    el("next3").addEventListener("click", ()=>{
+      const err = validateStep3();
+      if(err){ setErr(3, err); return; }
+      setErr(3,"");
+      renderSummary();
+      setStep(4);
+    });
+
+    el("back4").addEventListener("click", ()=> setStep(3));
+
+    // -------------------------
+    // Buttons: draft, clear, download
+    // -------------------------
+    el("btnSaveDraft").addEventListener("click", ()=>{
+      try{
+        saveDraft();
+        alert("Bozza salvata sul browser.");
+      }catch(e){
+        alert("Errore salvataggio bozza: " + e.message);
+      }
+    });
+
+    el("btnLoadDraft").addEventListener("click", ()=>{
+      try{
+        const ok = loadDraft();
+        if(!ok) alert("Nessuna bozza trovata.");
+        else{
+          alert("Bozza caricata. Nota: i file devono essere ricaricati (il browser non può ripristinare i contenuti dei file).");
+        }
+      }catch(e){
+        alert("Errore caricamento bozza: " + e.message);
+      }
+    });
+
+    el("btnClear").addEventListener("click", async ()=>{
+      const msg = "Vuoi svuotare TUTTO?\n\n" +
+                  "Questa operazione cancella: campi, metadati, allegati salvati (IndexedDB) e bozza.\n\n" +
+                  "Vuoi continuare?";
+      if(confirm(msg)){
+        await clearPracticeStorage();
+        clearAll();
+        try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+        renderPracticeDashboard();
+        applyAnnexFilter();
+        alert("Operazione completata: pratica e metadati sono stati azzerati.");
+      }
+    });
+    el("btnDownloadPDF").addEventListener("click", generateAllegatoPDF);
+
+    el("btnBackToAttachments").addEventListener("click", ()=> setStep(1));
+    document.getElementById('btnDownloadAllPDF')?.addEventListener('click', generateAllAnnexesPDF);
+
+    // -------------------------
+    // Pratica buttons
+    // -------------------------
+    el('btnSaveAnnex')?.addEventListener('click', async ()=>{
+      setErr(4,'');
+      // Persist and attempt to mark completed
+      const missing = countMissingRequired(state.annex, state.values);
+      await refreshEntryFilesMeta(state.annex);
+      if(missing > 0){
+        persistCurrentAnnex(false);
+        alert('Allegato salvato come bozza. Campi obbligatori mancanti: ' + missing);
+      } else {
+        persistCurrentAnnex(true);
+        alert('Allegato salvato e marcato come COMPLETO.');
+      }
+      renderPracticeDashboard();
+    });
+
+    document.getElementById('btnGenerateFascicolo')?.addEventListener('click', generateFascicoloPDF);
+
+    document.getElementById('btnExportPractice')?.addEventListener('click', exportPracticeZip);
+    document.getElementById('btnImportPractice')?.addEventListener('click', ()=> document.getElementById('importPracticeInput')?.click());
+    document.getElementById('importPracticeInput')?.addEventListener('change', async (ev)=>{
+      const f = ev.target.files && ev.target.files[0];
+      ev.target.value = '';
+      if(f) await importPracticeZip(f);
+    });
+    document.getElementById('modeSelect')?.addEventListener('change', (ev)=>{
+      const v = ev.target.value;
+      localStorage.setItem('unipa_mode_v1', v);
+      applyMode(v);
+    });
+    // Load practice on start (prima dei binding UI)
+    loadPractice();
+
+    // inizializza metadati (dopo loadPractice)
+    bindMetaBox();
+
+    // inizializza modalita
+    const savedMode = localStorage.getItem('unipa_mode_v1') || 'edit';
+    const ms = document.getElementById('modeSelect');
+    if(ms) ms.value = savedMode;
+    applyMode(savedMode);
+
+    // Load practice on start (gia' eseguito sopra)
+    try{ openDB().then(()=> renderPracticeDashboard()); }catch(e){}
+
+    // -------------------------
+    // Metadati amministrativi: reset + binding UI
+    // -------------------------
+    function resetMetaDefaults(){
+      // reset valori metadati in memoria + UI
+      practice.meta = {
+        ufficio: '',
+        area: '',
+        responsabile: '',
+        riferimento: '',
+        include: 'si',
+        privacy: 'standard',
+        note: ''
+      };
+      try{ savePractice(); }catch(e){}
+      try{
+        const u = document.getElementById('metaUfficio');
+        const a = document.getElementById('metaArea');
+        const r = document.getElementById('metaResp');
+        const rf = document.getElementById('metaRif');
+        const inc = document.getElementById('metaInclude');
+        const priv = document.getElementById('metaPrivacy');
+        const note = document.getElementById('metaNote');
+        if(u) u.value='';
+        if(a) a.value='';
+        if(r) r.value='';
+        if(rf) rf.value='';
+        if(inc) inc.value='si';
+        if(priv) priv.value='standard';
+        if(note) note.value='';
+      }catch(e){}
+    }
+
+    function bindMetaBox(){
+      const u = document.getElementById('metaUfficio');
+      const a = document.getElementById('metaArea');
+      const r = document.getElementById('metaResp');
+      const rf = document.getElementById('metaRif');
+      const inc = document.getElementById('metaInclude');
+      const priv = document.getElementById('metaPrivacy');
+      const note = document.getElementById('metaNote');
+      if(!u) return;
+
+      u.value = practice.meta.ufficio || '';
+      a.value = practice.meta.area || '';
+      r.value = practice.meta.responsabile || '';
+      rf.value = practice.meta.riferimento || '';
+      inc.value = practice.meta.include || 'si';
+      priv.value = practice.meta.privacy || 'standard';
+      note.value = practice.meta.note || '';
+
+      const sync = ()=>{
+        practice.meta.ufficio = u.value || '';
+        practice.meta.area = a.value || '';
+        practice.meta.responsabile = r.value || '';
+        practice.meta.riferimento = rf.value || '';
+        practice.meta.include = inc.value || 'si';
+        practice.meta.privacy = priv.value || 'standard';
+        practice.meta.note = note.value || '';
+        savePractice();
+      };
+      [u,a,r,rf,note].forEach(el=> el.addEventListener('input', sync));
+      [inc,priv].forEach(el=> el.addEventListener('change', sync));
+    }
+
+    // -------------------------
+    // Export / Import pratica (ZIP)
+    // -------------------------
+    async function dbListAllRecords(){
+      const db = await openDB();
+      return await new Promise((resolve, reject)=>{
+        const tx = db.transaction(DB_STORE, 'readonly');
+        const store = tx.objectStore(DB_STORE);
+        const out = [];
+        const req = store.openCursor();
+        req.onsuccess = ()=>{
+          const cur = req.result;
+          if(!cur){ resolve(out); return; }
+          const v = cur.value;
+          if(v && v.practiceId === practice.id) out.push(v);
+          cur.continue();
+        };
+        req.onerror = ()=> reject(req.error);
+      });
+    }
+
+    function sanitizeFilename(name){
+      return (name||'file').replace(/[\/:*?"<>|]+/g,'_').slice(0,140);
+    }
+
+    async function exportPracticeZip(){
+      if(!window.JSZip){
+        alert('JSZip non disponibile (verifica connessione o blocco CDN).');
+        return;
+      }
+      persistCurrentAnnex(false);
+
+      const zip = new JSZip();
+      const meta = { exportedAt: new Date().toISOString(), app:'Modulo Centri UniPA', version:'office-v1' };
+      const practiceObj = { id: practice.id, meta: practice.meta, annexes: practice.annexes, __meta: meta };
+      zip.file('practice.json', JSON.stringify(practiceObj, null, 2));
+
+      const folder = zip.folder('attachments');
+      const records = await dbListAllRecords();
+      for(const rec of records){
+        const fname = rec.attId + '__' + rec.annex + '__' + sanitizeFilename(rec.name);
+        folder.file(fname, rec.blob);
+      }
+
+      const blob = await zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level: 6 } });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Pratica_Centri_' + new Date().toISOString().slice(0,19).replaceAll(':','-') + '.zip';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function importPracticeZip(file){
+      if(!window.JSZip){
+        alert('JSZip non disponibile (verifica connessione o blocco CDN).');
+        return;
+      }
+      const zip = await JSZip.loadAsync(file);
+      const pfile = zip.file('practice.json');
+      if(!pfile){
+        alert('ZIP non valido: manca practice.json');
+        return;
+      }
+      let obj;
+      try{ obj = JSON.parse(await pfile.async('text')); }catch(e){
+        alert('practice.json non valido.');
+        return;
+      }
+
+      if(obj.id) localStorage.setItem(PRACTICE_ID_KEY, obj.id);
+      localStorage.setItem(PRACTICE_KEY, JSON.stringify({ id: obj.id || practice.id, meta: obj.meta || {}, annexes: obj.annexes || {} }));
+
+      const db = await openDB();
+      const attFolder = zip.folder('attachments');
+      if(attFolder){
+        const entries = [];
+        attFolder.forEach((relPath, fe)=>{ if(!fe.dir) entries.push({ relPath, fe }); });
+
+        for(const e of entries){
+          const parts = e.relPath.split('__');
+          const attId = parts[0];
+          const annex = parts[1] || '';
+          const originalName = parts.slice(2).join('__') || 'file';
+          const blob = await e.fe.async('blob');
+          const rec = { attId, practiceId: obj.id || practice.id, annex, name: originalName, type: blob.type || '', size: blob.size || 0, blob };
+          await new Promise((resolve, reject)=>{
+            const tx = db.transaction(DB_STORE, 'readwrite');
+            tx.objectStore(DB_STORE).put(rec);
+            tx.oncomplete = resolve;
+            tx.onerror = ()=> reject(tx.error);
+          });
+        }
+      }
+
+      location.reload();
+    }
+
+    // -------------------------
+    // Modalita: Compilazione / Sola lettura / Produzione
+    // -------------------------
+    function applyMode(mode){
+      const isRO = mode === 'readonly';
+      const isProd = mode === 'production';
+
+      document.querySelectorAll('input, textarea, select').forEach(el=> el.disabled = isRO);
+
+      // Riabilita sempre controllo modalita/tema e pulsanti export/import
+      const modeSel = document.getElementById('modeSelect');
+      const themeSel = document.getElementById('themeSelect');
+      if(modeSel) modeSel.disabled = false;
+      if(themeSel) themeSel.disabled = false;
+
+      ['btnExportPractice','btnImportPractice','btnGenerateFascicolo'].forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled=false; });
+
+      // Nascondi comandi tecnici in produzione
+      const hideIds = ['btnLoadDraft','btnSaveDraft','btnClear'];
+      hideIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display = isProd ? 'none' : ''; });
+
+      // In sola lettura, consenti comunque navigazione
+      if(isRO){
+        ['next1','next2','next3','back2','back3','back4','btnDownloadPDF','btnSaveAnnex'].forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled=false; });
+      }
+    }
+
+    // -------------------------
+    // Fascicolo: pagina Metadati (se richiesto)
+    // -------------------------
+    async function addMetaPageToFascicolo(outDoc){
+      if(!practice.meta) return;
+      if((practice.meta.include||'si') !== 'si') return;
+
+      const { StandardFonts, rgb } = PDFLib;
+      const font = await outDoc.embedFont(StandardFonts.Helvetica);
+      const fontBold = await outDoc.embedFont(StandardFonts.HelveticaBold);
+
+      const page = outDoc.addPage();
+      const { width, height } = page.getSize();
+
+      page.drawRectangle({ x:0, y:height-70, width, height:70, color: rgb(0.07,0.15,0.35) });
+      page.drawText('METADATI AMMINISTRATIVI', { x:40, y:height-45, size:16, font:fontBold, color: rgb(1,1,1) });
+
+      let y = height-100;
+      const rows = [
+        ['Ufficio/Struttura', practice.meta.ufficio || '—'],
+        ['Area/Settore', practice.meta.area || '—'],
+        ['Responsabile/Istruttore', practice.meta.responsabile || '—'],
+        ['Riferimento', practice.meta.riferimento || '—'],
+      ];
+      rows.forEach(([k,v])=>{
+        page.drawText(k+':', { x:40, y, size:11, font:fontBold, color: rgb(0,0,0) });
+        page.drawText(String(v).slice(0,180), { x:200, y, size:11, font:font, color: rgb(0,0,0), maxWidth: width-240 });
+        y -= 18;
+      });
+
+      if((practice.meta.privacy||'standard') !== 'riservato'){
+        const note = (practice.meta.note||'').trim();
+        if(note){
+          y -= 8;
+          page.drawText('Note istruttoria:', { x:40, y, size:11, font:fontBold, color: rgb(0,0,0) });
+          y -= 16;
+          const text = note.slice(0,1800);
+          const lineLen = 95;
+          const lines = [];
+          for(let i=0; i<text.length; i+=lineLen) lines.push(text.slice(i, i+lineLen));
+          for(const ln of lines.slice(0,16)){
+            if(y < 40) break;
+            page.drawText(ln, { x:40, y, size:10.5, font:font, color: rgb(0,0,0), maxWidth: width-80 });
+            y -= 13;
+          }
+        }
+      }
+    }
+
+    // Hook: inseriamo la pagina metadati nel fascicolo
+    const __oldGenerateFascicoloPDF = generateFascicoloPDF;
+    generateFascicoloPDF = async function(){
+      // La funzione originale crea e salva il fascicolo; qui intercettiamo la creazione inserendo una pagina metadati.
+      // Strategia: duplichiamo il flusso in modo minimale: se l'originale espone l'oggetto PDFLib, non possiamo intervenire.
+      // Quindi forniamo una versione integrata basata sulla logica esistente, con una piccola modifica.
+      return __oldGenerateFascicoloPDF(true);
+    };
+
+// Init
+    initTheme();
+    clearAll();
+    updateAllPdfButton();
+    
+  </script>
+</body>
+</html>
